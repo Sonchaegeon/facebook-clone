@@ -11,6 +11,18 @@ const GlobalStyle: GlobalStyleComponent<{}, DefaultTheme> = createGlobalStyle`
 
   body {
     background-color: #eff2f5;
+    color: #1c1e21;
+    line-height: 1.34;
+    font-size: 12px;
+  }
+
+  form {
+    margin: 0;
+    padding: 0;
+  }
+
+  input {
+    cursor: text;
   }
 `;
 
