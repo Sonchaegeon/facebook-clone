@@ -1,4 +1,9 @@
-import { IsEmail, IsString, Length } from 'class-validator';
+import { IsEmail, IsEnum, IsNumber, IsString, Length } from 'class-validator';
+
+enum Gender {
+  'F',
+  'M',
+}
 
 export class SignUpUserDto {
   @IsEmail()
@@ -9,6 +14,20 @@ export class SignUpUserDto {
   password: string;
 
   @IsString()
-  @Length(6, 16)
-  username: string;
+  lastname: string;
+
+  @IsString()
+  firstname: string;
+
+  @IsNumber()
+  birth_year: number;
+
+  @IsNumber()
+  birth_month: number;
+
+  @IsNumber()
+  birth_day: number;
+
+  @IsEnum(Gender)
+  gender: Gender;
 }
