@@ -1,9 +1,5 @@
 import { IsEmail, IsEnum, IsNumber, IsString, Length } from 'class-validator';
-
-enum Gender {
-  'F',
-  'M',
-}
+import { Gender } from './user.entity';
 
 export class SignUpUserDto {
   @IsEmail()
