@@ -1,12 +1,51 @@
-import React, { FC } from 'react';
+import React, {
+  ChangeEvent,
+  FC,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+import { RegisterReq } from '../../lib/api/payloads/Register';
 import {
+  getAxiosError,
   setDayDate,
   setMonthDate,
   setYearDate,
 } from '../../lib/utils/function';
 import * as S from '../../styles/Modal';
+import * as registerApi from '../../lib/api/Register';
 
 const Modal: FC = () => {
+  const [registerData, setRegisterData] = useState<RegisterReq>({
+    email: '',
+    password: '',
+    lastname: '',
+    firstname: '',
+    birth_year: '',
+    birth_day: '',
+    birth_month: '',
+    gender: '',
+  });
+
+  const changeData = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setRegisterData((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
+  const selectData = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setRegisterData((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
+  const submitHandler = useCallback(async () => {
+    try {
+      console.log(registerData);
+      await registerApi.makeAccount(registerData);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [registerData]);
+
   return (
     <>
       <S.ModalBackground>
@@ -24,15 +63,22 @@ const Modal: FC = () => {
               </S.FormHeaderWrapper>
               <>
                 <S.FormWrapper>
-                  <S.Form>
+                  <S.Form onSubmit={(e) => e.preventDefault()}>
                     <S.SmallInputWrapper>
-                      <S.SmallInput name="lastname" placeholder="성(姓)" />
+                      <S.SmallInput
+                        name="lastname"
+                        placeholder="성(姓)"
+                        value={registerData.lastname}
+                        onChange={changeData}
+                      />
                     </S.SmallInputWrapper>
                     <S.SmallInputWrapper>
                       <S.SmallInput
                         type="text"
-                        name="fistname"
+                        name="firstname"
                         placeholder="이름(성은 제외)"
+                        value={registerData.firstname}
+                        onChange={changeData}
                       />
                     </S.SmallInputWrapper>
                     <S.InputWrapper>
@@ -40,6 +86,8 @@ const Modal: FC = () => {
                         type="text"
                         name="email"
                         placeholder="휴대폰 번호 또는 이메일"
+                        value={registerData.email}
+                        onChange={changeData}
                       />
                     </S.InputWrapper>
                     <S.InputWrapper>
@@ -47,25 +95,37 @@ const Modal: FC = () => {
                         type="password"
                         name="password"
                         placeholder="새 비밀번호"
+                        value={registerData.password}
+                        onChange={changeData}
                       />
                     </S.InputWrapper>
                     <S.BirthInputWrapper>
                       <S.InputTitle>생일</S.InputTitle>
                       <S.BirchSelect
-                        name="birthday_year"
+                        name="birth_year"
                         id="year"
                         title="연도"
+                        value={registerData.birth_year}
+                        onChange={selectData}
                       >
                         {setYearDate()}
                       </S.BirchSelect>
                       <S.BirchSelect
-                        name="birthday_month"
+                        name="birth_month"
                         id="month"
                         title="월"
+                        value={registerData.birth_month}
+                        onChange={selectData}
                       >
                         {setMonthDate()}
                       </S.BirchSelect>
-                      <S.BirchSelect name="birthday_day" id="day" title="일">
+                      <S.BirchSelect
+                        name="birth_day"
+                        id="day"
+                        title="일"
+                        value={registerData.birth_day}
+                        onChange={selectData}
+                      >
                         {setDayDate()}
                       </S.BirchSelect>
                     </S.BirthInputWrapper>
@@ -77,8 +137,9 @@ const Modal: FC = () => {
                       <S.GenderRadio
                         type="radio"
                         id="gender_female"
-                        value="1"
+                        value="F"
                         name="gender"
+                        onChange={changeData}
                       />
                     </S.GenderSpan>
                     <S.GenderSpan>
@@ -86,12 +147,15 @@ const Modal: FC = () => {
                       <S.GenderRadio
                         type="radio"
                         id="gender_male"
-                        value="2"
+                        value="M"
                         name="gender"
+                        onChange={changeData}
                       />
                     </S.GenderSpan>
                     <S.SubmitWrapper>
-                      <S.SubmitButton>가입하기</S.SubmitButton>
+                      <S.SubmitButton onClick={submitHandler}>
+                        가입하기
+                      </S.SubmitButton>
                     </S.SubmitWrapper>
                   </S.Form>
                 </S.FormWrapper>
