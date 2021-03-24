@@ -127,7 +127,7 @@ export const Whitespace = styled.div`
   text-align: center;
 `;
 
-export const InputRegister = styled.a`
+export const InputRegister = styled.button`
   border: none;
   border-radius: 6px;
   font-size: 17px;
