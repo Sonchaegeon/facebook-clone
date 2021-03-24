@@ -1,5 +1,5 @@
 export interface ResDefault {
-  status: number;
-  message: string;
-  code: number;
+  statusCode: number;
+  message: string[];
+  error: string;
 }

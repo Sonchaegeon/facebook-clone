@@ -1,13 +1,6 @@
-import React, {
-  ChangeEvent,
-  FC,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ChangeEvent, FC, useCallback, useState } from 'react';
 import { RegisterReq } from '../../lib/api/payloads/Register';
 import {
-  getAxiosError,
   setDayDate,
   setMonthDate,
   setYearDate,
@@ -15,7 +8,12 @@ import {
 import * as S from '../../styles/Modal';
 import * as registerApi from '../../lib/api/Register';
 
-const Modal: FC = () => {
+interface Props {
+  visible: boolean;
+  onClose: () => void;
+}
+
+const Modal: FC<Props> = ({ visible, onClose }) => {
   const [registerData, setRegisterData] = useState<RegisterReq>({
     email: '',
     password: '',
@@ -39,12 +37,14 @@ const Modal: FC = () => {
 
   const submitHandler = useCallback(async () => {
     try {
-      console.log(registerData);
       await registerApi.makeAccount(registerData);
+      onClose();
     } catch (err) {
       console.log(err);
     }
   }, [registerData]);
+
+  if (!visible) return null;
 
   return (
     <>
@@ -56,6 +56,7 @@ const Modal: FC = () => {
                 width="24px"
                 height="24px"
                 aspect-ratio="auto 24 / 24"
+                onClick={onClose}
               />
               <S.FormHeaderWrapper>
                 <S.FormHeaderTitle>가입하기</S.FormHeaderTitle>

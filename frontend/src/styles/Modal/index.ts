@@ -36,6 +36,7 @@ export const ModalDiv = styled.div`
 export const CloseButton = styled.img.attrs({
   src: CloseButtonImage,
 })`
+  cursor: pointer;
   position: absolute;
   right: 10px;
   top: 12px;
