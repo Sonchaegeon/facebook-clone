@@ -13,12 +13,12 @@ export const apiDefault = () => {
   instance.interceptors.response.use(
     (res) => res,
     (err) => {
-      const { status } = getAxiosError(err);
+      const { statusCode, error } = getAxiosError(err);
 
-      if (status === 400) {
-        alert('요청이 잘못되었습니다.');
+      if (statusCode === 400) {
+        alert('요청이 잘못되었습니다 \n' + error);
       } else {
-        alert(status);
+        alert(statusCode);
       }
 
       return Promise.reject(err);
