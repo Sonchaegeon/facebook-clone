@@ -1,11 +1,20 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import * as S from '../../styles/Main';
 import Modal from '../common/Modal';
 
 const Main: FC = () => {
+  const [modal, setModal] = useState(false);
+  const onClick = () => {
+    setModal(true);
+  };
+
+  const onClose = () => {
+    setModal(false);
+  };
+
   return (
     <>
-      <Modal />
+      <Modal visible={modal} onClose={onClose} />
       <S.Background>
         <S.Wrapper>
           <S.Contents>
@@ -46,12 +55,12 @@ const Main: FC = () => {
                     <S.LostPass href="#">비밀번호를 잊으셨나요?</S.LostPass>
                   </S.LostPassWrapper>
                   <S.Whitespace />
-                  <S.InputWrapper>
-                    <S.InputRegister href="#" role="button">
-                      새 계정 만들기
-                    </S.InputRegister>
-                  </S.InputWrapper>
                 </S.Form>
+                <S.InputWrapper>
+                  <S.InputRegister onClick={onClick}>
+                    새 계정 만들기
+                  </S.InputRegister>
+                </S.InputWrapper>
               </S.BoxWrapper>
             </S.Box>
           </S.FormWrapper>
