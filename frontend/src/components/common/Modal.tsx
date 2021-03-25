@@ -9,11 +9,10 @@ import * as S from '../../styles/Modal';
 import * as registerApi from '../../lib/api/Register';
 
 interface Props {
-  visible: boolean;
-  onClose: () => void;
+  handleCloseModal: () => void;
 }
 
-const Modal: FC<Props> = ({ visible, onClose }) => {
+const Modal: FC<Props> = ({ handleCloseModal }) => {
   const [registerData, setRegisterData] = useState<RegisterReq>({
     email: '',
     password: '',
@@ -38,13 +37,11 @@ const Modal: FC<Props> = ({ visible, onClose }) => {
   const submitHandler = useCallback(async () => {
     try {
       await registerApi.makeAccount(registerData);
-      onClose();
+      handleCloseModal();
     } catch (err) {
       console.log(err);
     }
   }, [registerData]);
-
-  if (!visible) return null;
 
   return (
     <>
@@ -56,7 +53,7 @@ const Modal: FC<Props> = ({ visible, onClose }) => {
                 width="24px"
                 height="24px"
                 aspect-ratio="auto 24 / 24"
-                onClick={onClose}
+                onClick={handleCloseModal}
               />
               <S.FormHeaderWrapper>
                 <S.FormHeaderTitle>가입하기</S.FormHeaderTitle>
