@@ -1,20 +1,39 @@
-import React, { FC, useState } from 'react';
+import React, { ChangeEvent, FC, useCallback, useState } from 'react';
+import { LoginReq } from '../../lib/api/payloads/Login';
 import * as S from '../../styles/Main';
+import * as loginApi from '../../lib/api/Login';
 import Modal from '../common/Modal';
 
-const Main: FC = () => {
-  const [modal, setModal] = useState(false);
-  const onClick = () => {
-    setModal(true);
-  };
+interface Props {
+  modal: boolean;
+  handleCloseModal: () => void;
+  handleOpenModal: () => void;
+}
 
-  const onClose = () => {
-    setModal(false);
-  };
+const Main: FC<Props> = ({ modal, handleCloseModal, handleOpenModal }) => {
+  const [loginData, setLoginData] = useState<LoginReq>({
+    email: '',
+    password: '',
+  });
+
+  const changeData = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginData((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
+  const submitHandler = useCallback(async () => {
+    try {
+      const tokens = await loginApi.signIn(loginData);
+      localStorage.setItem('access-token', tokens.data.access_token);
+      localStorage.setItem('refresh-token', tokens.data.refresh_token);
+    } catch (err) {
+      console.log(err);
+    }
+  }, [loginData]);
 
   return (
     <>
-      <Modal visible={modal} onClose={onClose} />
+      {modal && <Modal handleCloseModal={handleCloseModal} />}
       <S.Background>
         <S.Wrapper>
           <S.Contents>
@@ -27,7 +46,7 @@ const Main: FC = () => {
           <S.FormWrapper>
             <S.Box>
               <S.BoxWrapper>
-                <S.Form>
+                <S.Form onSubmit={(e) => e.preventDefault()}>
                   <>
                     <S.InputFieldDiv>
                       <S.Input
@@ -35,19 +54,27 @@ const Main: FC = () => {
                         name="email"
                         id="emill"
                         placeholder="이메일 또는 전화번호"
+                        value={loginData.email}
+                        onChange={changeData}
                       />
                     </S.InputFieldDiv>
                     <S.InputFieldDiv>
                       <S.Input
                         type="password"
-                        name="pass"
+                        name="password"
                         id="pass"
                         placeholder="비밀번호"
+                        value={loginData.password}
+                        onChange={changeData}
                       />
                     </S.InputFieldDiv>
                   </>
                   <S.InputWrapper>
-                    <S.InputSubmit type="submit" name="login">
+                    <S.InputSubmit
+                      type="submit"
+                      name="login"
+                      onClick={submitHandler}
+                    >
                       로그인
                     </S.InputSubmit>
                   </S.InputWrapper>
@@ -57,7 +84,7 @@ const Main: FC = () => {
                   <S.Whitespace />
                 </S.Form>
                 <S.InputWrapper>
-                  <S.InputRegister onClick={onClick}>
+                  <S.InputRegister onClick={handleOpenModal}>
                     새 계정 만들기
                   </S.InputRegister>
                 </S.InputWrapper>
