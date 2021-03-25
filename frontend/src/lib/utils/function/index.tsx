@@ -54,6 +54,6 @@ export const setDayDate = () => {
 
 export const getAxiosError = (err: AxiosError<ResDefault>) => {
   console.log(err.response.data);
-  const { statusCode, error, message } = err.response.data;
-  return { statusCode, error, message };
+  const { code, message } = err.response.data;
+  return { code, message };
 };
