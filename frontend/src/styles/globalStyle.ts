@@ -21,6 +21,10 @@ const GlobalStyle: GlobalStyleComponent<{}, DefaultTheme> = createGlobalStyle`
     padding: 0;
   }
 
+  button {
+    cursor: pointer;
+  }
+
   input {
     cursor: text;
   }
