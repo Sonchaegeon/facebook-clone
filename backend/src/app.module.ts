@@ -5,6 +5,8 @@ import { connectionOptions } from './config';
 import { AuthModule } from './auth/auth.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/http-exception.filter';
+import { GraphQLModule } from '@nestjs/graphql';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -16,7 +18,11 @@ import { HttpExceptionFilter } from './common/http-exception.filter';
       useFactory: (config: ConfigService) => config.get(process.env.NODE_ENV),
       inject: [ConfigService],
     }),
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+    }),
     AuthModule,
+    PostModule,
   ],
   providers: [
     {
