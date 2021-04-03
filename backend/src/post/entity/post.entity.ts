@@ -2,6 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/auth/entity/user.entity';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -18,6 +19,10 @@ export class Post {
   @Field()
   @Column({ type: 'text' })
   contents: string;
+
+  @Field()
+  @CreateDateColumn()
+  created_at: Date;
 
   @ManyToOne(() => User, (user) => user.posts)
   @JoinColumn({ name: 'user_id' })
