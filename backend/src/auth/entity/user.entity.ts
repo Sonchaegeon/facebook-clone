@@ -1,5 +1,11 @@
 import { Post } from 'src/post/entity/post.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum Gender {
   FEMAIL = 'F',
@@ -34,6 +40,9 @@ export class User {
 
   @Column({ type: 'enum', enum: Gender })
   gender: Gender;
+
+  @CreateDateColumn()
+  created_at: Date;
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
