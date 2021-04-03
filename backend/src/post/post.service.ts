@@ -1,12 +1,11 @@
-import { Inject, Injectable, Scope } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Request } from 'express';
 import { User } from 'src/auth/entity/user.entity';
 import { UserRepository } from 'src/auth/entity/user.repository';
-import { TokenPayload } from 'src/auth/interface/payload.interface';
 import { GetPostsArgs } from './dto/args/get-posts.args';
-import { CreatePostInput } from './dto/input/create-post.input';
+import { CreatePostInput, UpdatePostInput } from './dto/input';
+import { PostUserView } from './entity/post-view.entity';
+import { PostUserViewRepository } from './entity/post-view.repository';
 import { Post } from './entity/post.entity';
 import { PostRepository } from './entity/post.repository';
 
@@ -15,10 +14,12 @@ export class PostService {
   constructor(
     @InjectRepository(Post) private postRepository: PostRepository,
     @InjectRepository(User) private userRepository: UserRepository,
+    @InjectRepository(PostUserView)
+    private postUserViewRepository: PostUserViewRepository,
   ) {}
 
   public async getPosts(getPostsArgs: GetPostsArgs): Promise<Post[]> {
-    return await this.postRepository.getPosts(getPostsArgs);
+    return await this.postUserViewRepository.getPosts(getPostsArgs);
   }
 
   public async createPost(
@@ -28,4 +29,6 @@ export class PostService {
     const user = await this.userRepository.findOne(userId);
     return await this.postRepository.createPost(createPostData, user);
   }
+
+  public async updatePost(updatePostData: UpdatePostInput, userId: number) {}
 }
