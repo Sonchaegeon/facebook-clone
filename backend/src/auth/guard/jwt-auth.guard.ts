@@ -1,18 +1,18 @@
-import {
-  GoneException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { TokenExpiredError } from 'jsonwebtoken';
+import {
+  ExpiredTokenError,
+  InternalServerError,
+} from 'src/common/http-exception.index';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   handleRequest(err, user, info: Error) {
     if (info instanceof TokenExpiredError) {
-      throw new GoneException('Token expired');
+      throw ExpiredTokenError;
     } else if (err) {
-      throw new InternalServerErrorException();
+      throw InternalServerError;
     }
     return user;
   }

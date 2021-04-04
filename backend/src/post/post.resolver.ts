@@ -3,7 +3,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
 import { GqlAuthGuard } from 'src/auth/guard/gql-auth.guard';
 import { GetPostsArgs } from './dto/args/get-posts.args';
-import { CreatePostInput } from './dto/input/create-post.input';
+import { CreatePostInput, UpdatePostInput } from './dto/input';
 import { Post } from './entity/post.entity';
 import { PostService } from './post.service';
 
@@ -23,5 +23,14 @@ export class PostResolver {
     @CurrentUser() userId: number,
   ): Promise<Post> {
     return await this.postService.createPost(createPostData, userId);
+  }
+
+  @UseGuards(GqlAuthGuard)
+  @Mutation(() => Post)
+  public async updatePost(
+    @Args('updatePostData') updatePostData: UpdatePostInput,
+    @CurrentUser() userId: number,
+  ): Promise<Post> {
+    return await this.postService.updatePost(updatePostData, userId);
   }
 }
