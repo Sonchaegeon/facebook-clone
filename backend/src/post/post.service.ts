@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/entity/user.entity';
 import { UserRepository } from 'src/auth/entity/user.repository';
+import { ForbiddenError, NotFoundError } from 'src/common/http-exception.index';
 import { GetPostsArgs } from './dto/args/get-posts.args';
 import { CreatePostInput, UpdatePostInput } from './dto/input';
 import { PostUserView } from './entity/post-view.entity';
@@ -27,8 +28,30 @@ export class PostService {
     userId: number,
   ): Promise<Post> {
     const user = await this.userRepository.findOne(userId);
+    if (!user) {
+      throw NotFoundError;
+    }
+
     return await this.postRepository.createPost(createPostData, user);
   }
 
-  public async updatePost(updatePostData: UpdatePostInput, userId: number) {}
+  public async updatePost(
+    updatePostData: UpdatePostInput,
+    userId: number,
+  ): Promise<Post> {
+    const user = await this.userRepository.findOne(userId);
+    const isExist = await this.postUserViewRepository.existUserPost(
+      updatePostData.id,
+      user.id,
+    );
+    if (!user) {
+      throw NotFoundError;
+    }
+    if (!isExist) {
+      throw ForbiddenError;
+    }
+
+    await this.postRepository.updatePost(updatePostData);
+    return await this.postRepository.findOne(updatePostData.id);
+  }
 }
