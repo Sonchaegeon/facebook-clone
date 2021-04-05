@@ -1,7 +1,12 @@
 import { User } from 'src/auth/entity/user.entity';
-import { EntityRepository, Repository, UpdateResult } from 'typeorm';
+import {
+  DeleteResult,
+  EntityRepository,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { GetPostsArgs } from '../dto/args/get-posts.args';
-import { UpdatePostInput } from '../dto/input';
+import { DeletePostInput, UpdatePostInput } from '../dto/input';
 import { CreatePostInput } from '../dto/input/create-post.input';
 import { Post } from './post.entity';
 
@@ -23,5 +28,11 @@ export class PostRepository extends Repository<Post> {
     return await this.update(updatePostData.id, {
       contents: updatePostData.contents,
     });
+  }
+
+  public async deletePost(
+    deletePostData: DeletePostInput,
+  ): Promise<DeleteResult> {
+    return await this.delete(deletePostData.id);
   }
 }
