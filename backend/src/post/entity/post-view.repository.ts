@@ -14,15 +14,16 @@ export class PostUserViewRepository extends Repository<PostUserView> {
       .getRawMany();
   }
 
-  public async existUserPost(postId: number, userId: number): Promise<boolean> {
+  public async existUserPost(postId: number, userId: number): Promise<Post> {
     const postRecord = await this.createQueryBuilder('view')
-      .select('view.contents', 'contents')
+      .select('view.post_id', 'post_id')
+      .addSelect('view.contents', 'contents')
       .where('view.user_id = :user_id AND view.post_id = :post_id', {
         user_id: userId,
         post_id: postId,
       })
       .getRawOne();
 
-    return !!postRecord;
+    return postRecord;
   }
 }
