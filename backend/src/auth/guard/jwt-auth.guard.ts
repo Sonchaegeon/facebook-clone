@@ -4,7 +4,7 @@ import { TokenExpiredError } from 'jsonwebtoken';
 import {
   ExpiredTokenError,
   InternalServerError,
-} from 'src/common/http-exception.index';
+} from 'src/common/apollo/apollo-exception.index';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {

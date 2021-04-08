@@ -1,17 +1,7 @@
 import {
-  UserInputError,
-  AuthenticationError,
   ForbiddenError as ForbiddenApolloError,
   ApolloError,
 } from 'apollo-server-errors';
-
-// 400
-export const EmailAlreadyExistError = new UserInputError(
-  'Email already exist error',
-);
-
-// 401
-export const UnauthorizedError = new AuthenticationError('Unauthorized error');
 
 // 403
 export const ForbiddenError = new ForbiddenApolloError('Forbidden error');

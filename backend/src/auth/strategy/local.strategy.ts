@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseFilters } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
-import { UnauthorizedError } from 'src/common/http-exception.index';
+import { HttpExceptionFilter } from 'src/common/http/http-exception.filter';
+import { UnauthorizedError } from 'src/common/http/http-exception.index';
 import { AuthService } from '../auth.service';
 
+@UseFilters(HttpExceptionFilter)
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {

@@ -1,12 +1,14 @@
-import { UseGuards } from '@nestjs/common';
+import { UseFilters, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser } from 'src/auth/decorator/current-user.decorator';
 import { GqlAuthGuard } from 'src/auth/guard/gql-auth.guard';
+import { ApolloExceptionFilter } from 'src/common/apollo/apollo-exception.filter';
 import { GetPostsArgs } from './dto/args/get-posts.args';
 import { CreatePostInput, UpdatePostInput, DeletePostInput } from './dto/input';
 import { Post } from './entity/post.entity';
 import { PostService } from './post.service';
 
+@UseFilters(ApolloExceptionFilter)
 @Resolver(() => Post)
 export class PostResolver {
   constructor(private readonly postService: PostService) {}
