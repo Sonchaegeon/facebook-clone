@@ -5,7 +5,7 @@ import { User } from './entity/user.entity';
 import { UserRepository } from './entity/user.repository';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { EmailAlreadyExistError } from 'src/common/http-exception.index';
+import { EmailAlreadyExistError } from 'src/common/http/http-exception.index';
 
 @Injectable()
 export class AuthService {

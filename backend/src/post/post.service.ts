@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/entity/user.entity';
 import { UserRepository } from 'src/auth/entity/user.repository';
-import { ForbiddenError, NotFoundError } from 'src/common/http-exception.index';
+import {
+  ForbiddenError,
+  NotFoundError,
+} from 'src/common/apollo/apollo-exception.index';
 import { GetPostsArgs } from './dto/args/get-posts.args';
 import { CreatePostInput, UpdatePostInput, DeletePostInput } from './dto/input';
 import { PostUserView } from './entity/post-view.entity';
